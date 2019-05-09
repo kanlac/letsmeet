@@ -1,0 +1,21 @@
+{% extends 'base-logged.html' %}
+
+{% block title %}{{ e.title }}{% endblock %}
+
+{% block page_content %}
+
+<h1>{{ e.title }}</h1>
+<p>{{ e.city }} | {{ e.date }}</p><br>
+<p>HOST: {{ host.username }}</p><br>
+<p>{{ e.description }}</p>
+
+{% if loginas == host.username %} {# 该活动的 host 是本人 #}
+	<a href="{{ url_for('showManagingTable', event_id=e.event_id) }}">Manage applicants</a>
+{% else %} {# 该活动的 host 不是本人 #}
+	<a href="{{ url_for('apply', event_id=e.event_id) }}">I wanna join!</a>
+	{% if statusTxt is not none %}
+		<p><{{ statusTxt }}></p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}

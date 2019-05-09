@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}LetsMeet{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% for message in get_flashed_messages() %}
+	<div class="alert alert-warning">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	</div>
+	{% endfor %}
+
+	{% block page_content %} {% endblock %} <!-- 继承该模版的子模版中的内容要写在这个 block 里，也就是说子模版中写到 block 之外的内容不会在页面中显示出来 -->
+{% endblock %}

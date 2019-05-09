@@ -1,0 +1,75 @@
+{% extends 'base-logged.html' %}
+
+{% block page_content %}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>申请人</th>
+			<th>申请表</th>
+			<th>状态</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in rows %}
+		<tr>
+			<input type="hidden" name="ue_id" value="{{ row.ue_id }}">
+			<td>{{row.attendee_name}}</td>
+			<td>{{row.form}}</td>
+			<td>
+				{% if row.status == 2 %}
+				已通过
+				{% elif row.status == 3 %}
+				已拒绝
+				{% else %}
+				未操作
+				{% endif %}
+			</td>
+			<td>
+				<a href="#" id="accept">通过</a>                                       <a href="#" id="deny">拒绝</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{# 导入 jQuery 库 #}
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+<script type="text/javascript">
+	var newStatus;
+
+	$(function() { // 按下「同意」
+		$('a#accept').click(function() {
+			newStatus = "2";
+			updateStatus();
+		});
+	});
+	$(function() { // 按下「拒绝」
+		$('a#deny').click(function() {
+			newStatus = "3";
+			updateStatus();
+		});
+	});
+
+	function updateStatus() {
+		// $.getJSON(url, data, func) 发送一个 GET 请求到 url， data 为查询参数，返回数据后以返回的数据作为参数调用 func
+		$.getJSON("{{ url_for('operateAttendee') }}", {
+			ue_id: $('input[name="ue_id"]').val(),
+			newStatus: newStatus
+		}, function(data) {
+			console.log("test2");
+			alert("sucess");
+			location.reload();
+		});
+		return false;
+	}
+</script>
+
+{% endblock %}
