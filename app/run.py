@@ -2,10 +2,11 @@ from flask import Flask, render_template, flash, url_for, session, redirect, req
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import Required
+from wtforms.validators import Required, DataRequired
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsmeet'
@@ -20,7 +21,18 @@ class User(db.Model):
 
 	user_id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(80), unique=True, nullable=False)
-	password = db.Column(db.NVARCHAR(50), unique=False, nullable=False)
+	password_hash = db.Column(db.String(128), nullable=False)
+
+	@property
+	def password(self):
+		raise AttributeError('password is not a readable attribute')
+
+	@password.setter
+	def password(self, password):
+		self.password_hash = generate_password_hash(password)
+
+	def verify_password(self, password):
+		return check_password_hash(self.password_hash, password)
 
 	def __repr__(self): # debug 有效
 		return '<User %r>' % self.username
@@ -54,9 +66,11 @@ class User_Event(db.Model):
 	def __repr__(self):
 		return '<User_Event %r>' % self.ue_id
 
+
+
 # 登录表单类
 class LoginForm(FlaskForm):
-	username = StringField('Username', validators=[Required()])
+	username = StringField('Username', validators=[DataRequired()])
 	password = PasswordField('Password', validators=[Required()])
 	submit = SubmitField('Login')
 
@@ -65,7 +79,6 @@ class LoginForm(FlaskForm):
 class ApplicationForm(FlaskForm):
 	text = StringField('申请书', validators=[Required()])
 	submit = SubmitField('提交')
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -81,9 +94,11 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit(): # 点击 Submit 后…
 		user = User.query.filter_by(username=form.username.data).first() # 查看数据库中是否有这个用户名
+		print('check hash:')
+		print(generate_password_hash(form.password.data))
 		if user is None: # 没有，提示错误，请注册
 			flash("User doesn't exist.")
-		elif form.password.data == user.password: # 有则判断输入密码是否正确 
+		elif user.verify_password(form.password.data): # 有则判断输入密码是否正确 
 			session['loginas'] = user.username
 			return redirect(url_for('index'))
 		else:
@@ -163,6 +178,14 @@ def operateAttendee():
 	record.status = newStatus
 	db.session.commit()
 	return jsonify(success=True)
+
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+	return render_template('500.html'), 500
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
-def refreshSampleData(db):
-	from run import User, Event, User_Event
+def loadData(db):
+	from app.run import User, Event, User_Event
 
 	db.drop_all()
 	db.create_all()
@@ -21,5 +21,3 @@ def refreshSampleData(db):
 
 	db.session.add(jackGoHiking)
 	db.session.commit()
-
-	# print(jack.username)

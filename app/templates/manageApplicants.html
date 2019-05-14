@@ -1,8 +1,17 @@
 {% extends 'base-logged.html' %}
 
+{% block head %}
+{{ super() }}
+<style type="text/css">
+	.table-data-center th, td {
+		text-align: center;
+	}
+</style>
+{% endblock %}
+
 {% block page_content %}
 
-<table class="table">
+<table class="table table-data-center">
 	<thead>
 		<tr>
 			<th>申请人</th>
@@ -27,7 +36,7 @@
 				{% endif %}
 			</td>
 			<td>
-				<a href="#" id="accept">通过</a>                                       <a href="#" id="deny">拒绝</a>
+				<a href="#" id="accept">通过</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="deny">拒绝</a>
 			</td>
 		</tr>
 		{% endfor %}
@@ -43,15 +52,17 @@
 <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
 
 <script type="text/javascript">
-	var newStatus;
+	var 
+		newStatus,
+		$aAccept = $('a#accept');
 
 	$(function() { // 按下「同意」
-		$('a#accept').click(function() {
+		$aAccept.click(function() {
 			newStatus = "2";
 			updateStatus();
-		});
-	});
-	$(function() { // 按下「拒绝」
+		}),
+
+		// 按下「拒绝」
 		$('a#deny').click(function() {
 			newStatus = "3";
 			updateStatus();
@@ -64,7 +75,6 @@
 			ue_id: $('input[name="ue_id"]').val(),
 			newStatus: newStatus
 		}, function(data) {
-			console.log("test2");
 			alert("sucess");
 			location.reload();
 		});
