@@ -7,13 +7,16 @@ from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsmeet'
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = 'hard to guess string'
+
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
+migrate = Migrate(app, db) # 创建该对象以使用 $ flask db
 
 
 class User(db.Model):
