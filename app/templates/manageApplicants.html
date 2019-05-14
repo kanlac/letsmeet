@@ -9,6 +9,7 @@
 </style>
 {% endblock %}
 
+
 {% block page_content %}
 
 <table class="table table-data-center">
@@ -71,7 +72,7 @@
 
 	function updateStatus() {
 		// $.getJSON(url, data, func) 发送一个 GET 请求到 url， data 为查询参数，返回数据后以返回的数据作为参数调用 func
-		$.getJSON("{{ url_for('operateAttendee') }}", {
+		$.getJSON("{{ url_for('main.operateAttendee') }}", {
 			ue_id: $('input[name="ue_id"]').val(),
 			newStatus: newStatus
 		}, function(data) {

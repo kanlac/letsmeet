@@ -68,7 +68,6 @@ class User_Event(db.Model):
 	def __repr__(self):
 		return '<User_Event %r>' % self.ue_id
 
-
 # 登录表单类
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
@@ -184,11 +183,3 @@ def operateAttendee():
 	record.status = newStatus
 	db.session.commit()
 	return jsonify(success=True)
-
-@app.errorhandler(404)
-def page_not_found(e):
-	return render_template('404.html'), 404
-
-@app.errorhandler(500)
-def internal_server_error(e):
-	return render_template('500.html'), 500
