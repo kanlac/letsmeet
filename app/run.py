@@ -8,11 +8,10 @@ from flask_nav import Nav
 from flask_nav.elements import Navbar, View
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
+from config import config
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsmeet'
-app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = 'hard to guess string'
+app.config.from_object(config['development'])
 
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
