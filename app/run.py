@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, url_for, session, redirect, req
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import Required, DataRequired
+from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View
@@ -67,18 +67,22 @@ class User_Event(db.Model):
 		return '<User_Event %r>' % self.ue_id
 
 
-
 # 登录表单类
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
-	password = PasswordField('Password', validators=[Required()])
+	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Login')
 
 
 #申请表表单类
 class ApplicationForm(FlaskForm):
-	text = StringField('申请书', validators=[Required()])
+	text = StringField('申请书', validators=[DataRequired()])
 	submit = SubmitField('提交')
+
+
+@app.shell_context_processor
+def make_shell_context():
+	return dict(db=db, User=User, Event=Event, User_Event=User_Event)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -186,7 +190,3 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
 	return render_template('500.html'), 500
-
-
-if __name__ == '__main__':
-	app.run(debug=True)
