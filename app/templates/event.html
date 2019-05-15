@@ -9,7 +9,7 @@
 <p>HOST: {{ host.username }}</p><br>
 <p>{{ e.description }}</p>
 
-{% if loginas == host.username %} {# 该活动的 host 是本人 #}
+{% if current_user == host %} {# 该活动的 host 是本人 #}
 	<a href="{{ url_for('main.showManagingTable', event_id=e.event_id) }}">Manage applicants</a>
 {% else %} {# 该活动的 host 不是本人 #}
 	<a href="{{ url_for('main.apply', event_id=e.event_id) }}">I wanna join!</a>

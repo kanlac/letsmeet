@@ -1,8 +1,9 @@
 from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, login_manager
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 	__tablename__ = 'User'
 
 	user_id = db.Column(db.Integer, primary_key=True)
@@ -22,6 +23,9 @@ class User(db.Model):
 
 	def __repr__(self): # debug 有效
 		return '<User %r>' % self.username
+
+	def get_id(self):
+		return (self.user_id)
 
 
 class Event(db.Model):
@@ -51,3 +55,9 @@ class User_Event(db.Model):
 
 	def __repr__(self):
 		return '<User_Event %r>' % self.ue_id
+
+
+# flask-login 的回调函数
+@login_manager.user_loader # user_loader 是自定义的名字吗？
+def load_user(user_id):
+	return User.query.get(int(user_id)) # SQLAlchemy 指令的 get() 方法，直接以 id 的 int 值为参数查询
