@@ -24,7 +24,7 @@ class User(UserMixin, db.Model):
 	def __repr__(self): # debug 有效
 		return '<User %r>' % self.username
 
-	def get_id(self):
+	def get_id(self): # flask-login 回调函数只能识别名字'id'，因此这里需要手动定义
 		return (self.user_id)
 
 

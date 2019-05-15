@@ -1,8 +1,9 @@
 from flask import render_template, flash, url_for, session, redirect, request, jsonify
 from ..models import User
 from . import auth
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
 from flask_login import login_user, logout_user, login_required, current_user
+from .. import db
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -24,3 +25,14 @@ def logout():
 	logout_user()
 	flash('You have been logged out.')
 	return redirect(url_for('.login'))
+
+@auth.route('/register')
+def register():
+	form = RegistrationForm()
+	if form.validate_on_submit():
+		user = User(username=form.username.data, password=form.password.data)
+		db.session.add(user)
+		db.session.commit()
+		flash('You can now login.')
+		return redirect(url_for('auth.login'))
+	return render_template('register.html', form=form)
