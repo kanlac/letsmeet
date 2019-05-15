@@ -3,7 +3,7 @@ from ..models import User, Event, User_Event
 from .. import db
 from . import main
 from .forms import ApplicationForm
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -14,6 +14,7 @@ def index():
 	return redirect(url_for('auth.login'))
 
 @main.route('/event/<event_id>')
+@login_required
 def showEvent(event_id):
 	e = Event.query.filter_by(event_id=event_id).first()
 	host = User.query.filter_by(user_id=e.host_id).first()
@@ -31,6 +32,7 @@ def showEvent(event_id):
 	return render_template('event.html', host=host, e=e, statusTxt=statusTxt)
 
 @main.route('/apply/<event_id>', methods=['GET', 'POST'])
+@login_required
 def apply(event_id):
 	applicationForm = ApplicationForm()
 	event = Event.query.filter_by(event_id=event_id).first()
@@ -51,6 +53,7 @@ def apply(event_id):
 	return render_template('apply.html', event=event, form=applicationForm)
 
 @main.route('/manageApplicants/<event_id>', methods=['GET'])
+@login_required
 def showManagingTable(event_id):
 	event = Event.query.filter_by(event_id=event_id).first()
 	user = User.query.filter_by(user_id=event.host_id).first()
@@ -70,6 +73,7 @@ def showManagingTable(event_id):
 	return render_template('manageApplicants.html', rows=rows)
 
 @main.route('/operateAttendee')
+@login_required
 def operateAttendee():
 	ue_id = request.args.get('ue_id', type=int)
 	newStatus = request.args.get('newStatus', type=int)

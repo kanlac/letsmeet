@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	if form.validate_on_submit(): # 点击 Submit 后…
+	if form.validate_on_submit(): # 针对 POST 请求，即点击 Submit 后
 		user = User.query.filter_by(username=form.username.data).first() # 查看数据库中是否有这个用户名
 		if user is None: # 没有，提示错误，请注册
 			flash("User doesn't exist.")
