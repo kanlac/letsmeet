@@ -15,8 +15,10 @@ class BasicsTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    # 测试函数一，确保应用实例存在
     def test_app_exists(self):
         self.assertFalse(current_app is None)
 
+    # 测试函数二，确保使用的是测试配置
     def test_app_is_testing(self):
         self.assertTrue(current_app.config['TESTING'])
