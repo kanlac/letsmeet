@@ -26,11 +26,14 @@ def logout():
 	flash('You have been logged out.')
 	return redirect(url_for('.login'))
 
-@auth.route('/register')
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
+	print('test3')
 	form = RegistrationForm()
 	if form.validate_on_submit():
+		print('test')
 		user = User(username=form.username.data, password=form.password.data)
+		print(user)
 		db.session.add(user)
 		db.session.commit()
 		flash('You can now login.')
