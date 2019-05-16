@@ -1,5 +1,7 @@
 {% extends 'base-logged.html' %}
 
+{% block title %}LetsMeet-管理申请者{% endblock %}
+
 {% block head %}
 {{ super() }}
 <style type="text/css">
@@ -57,14 +59,13 @@
 		newStatus,
 		$aAccept = $('a#accept');
 
-	$(function() { // 按下「同意」
-		$aAccept.click(function() {
+	$(function() {
+		$aAccept.click(function() { // 按下「同意」
 			newStatus = "2";
 			updateStatus();
 		}),
 
-		// 按下「拒绝」
-		$('a#deny').click(function() {
+		$('a#deny').click(function() { // 按下「拒绝」
 			newStatus = "3";
 			updateStatus();
 		});

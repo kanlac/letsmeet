@@ -27,8 +27,6 @@ def showEvent(event_id):
 			statusTxt = '未通过'
 		if record.status is 3:
 			statusTxt = '已通过'
-	if statusTxt is not None:
-		print('statusTxt is: ' + statusTxt)
 	return render_template('event.html', host=host, e=e, statusTxt=statusTxt)
 
 @main.route('/apply/<event_id>', methods=['GET', 'POST'])
@@ -57,8 +55,6 @@ def apply(event_id):
 def showManagingTable(event_id):
 	event = Event.query.filter_by(event_id=event_id).first()
 	user = User.query.filter_by(user_id=event.host_id).first()
-	print(user)
-	print(current_user)
 
 	if user.username is not current_user.username:
 		flash('不是你发起的活动！')
@@ -77,11 +73,14 @@ def showManagingTable(event_id):
 def operateAttendee():
 	ue_id = request.args.get('ue_id', type=int)
 	newStatus = request.args.get('newStatus', type=int)
-	print("ue_id:" + str(ue_id))
-	print(newStatus)
 	# update database…
 	record = User_Event.query.filter_by(ue_id=ue_id).one()
-	print(record)
 	record.status = newStatus
 	db.session.commit()
 	return jsonify(success=True)
+
+@main.route('/hostings')
+@login_required
+def showHostings():
+	hostings = Event.query.filter_by(host_id=current_user.user_id).all()
+	return render_template('hostings.html', hostings=hostings)
