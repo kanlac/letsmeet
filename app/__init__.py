@@ -23,6 +23,9 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
+    from .main.errors import page_not_found, internal_server_error
+    app.register_error_handler(404, page_not_found)
+    app.register_error_handler(500, internal_server_error)
     
     return app
 
