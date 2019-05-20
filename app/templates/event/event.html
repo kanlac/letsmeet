@@ -12,7 +12,8 @@
 <p>{{ e.description }}</p>
 
 {% if current_user == host %} {# 该活动的 host 是本人 #}
-	<a href="{{ url_for('main.showManagingTable', event_id=e.event_id) }}">Manage applicants</a>
+	<a href="{{ url_for('main.showManagingTable', event_id=e.event_id) }}">Manage applicants.</a><br>
+	<a href="{{ url_for('main.delete', event_id=e.event_id) }}">Delete this event.</a>
 {% else %} {# 该活动的 host 不是本人 #}
 	<a href="{{ url_for('main.apply', event_id=e.event_id) }}">I wanna join!</a>
 	{% if statusTxt is not none %}

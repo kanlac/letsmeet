@@ -117,6 +117,30 @@ def originate():
 		return redirect(url_for('.showEvent', event_id=event.event_id))
 	return render_template('page/originate.html', form=form)
 
+@main.route('/delete/<event_id>', methods=['GET', 'POST'])
+@login_required
+def delete(event_id):
+	to_delete = Event.query.filter_by(event_id=event_id).one()
+	print("to_delete:")
+	print(to_delete)
+	if to_delete.host_id != current_user.user_id:
+		flash("You can't delete event hosted by others.")
+	else: # 执行
+		# 移除图片文件
+		poster = to_delete.poster
+		os.remove(os.path.join(app.config['UPLOAD_FOLDER'], str(poster)))
+		# 删除 User_Event 表相关的数据
+		records = User_Event.query.filter_by(event_id=event_id).all()
+		for r in records:
+			db.session.delete(r)
+		db.session.commit()
+		# 删除 Event 表中该行
+		db.session.delete(to_delete)
+		db.session.commit()
+
+		flash("Success.")
+	return redirect(url_for('.index'))
+
 
 
 
