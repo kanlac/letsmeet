@@ -1,0 +1,18 @@
+{% extends 'base-logged.html' %}
+
+{% block title %}LetsMeet-我申请的{% endblock %}
+
+{% block page_content %}
+
+{% if applications.rowcount==0 %}
+	<h2>You haven't applied any events yet.</h2>
+{% else %}
+	{% for event in applications %}
+		<h1><a href="{{ url_for('main.showApplications', event_id=event.event_id) }}" style="text-decoration: none;">{{ event.title }}</a></h1><br>
+		<p>{{ event.city }} | {{ event.date }}</p><br>
+		<p>{{ event.description }}</p>
+		<hr>
+	{% endfor %}
+{% endif %}
+
+{% endblock %}

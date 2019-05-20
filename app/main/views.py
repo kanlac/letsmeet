@@ -65,7 +65,8 @@ def showManagingTable(event_id):
 		`User_Event`.`ue_id`, `User_Event`.`event_id`, `User_Event`.`status`, `User_Event`.`form`\
 		FROM User INNER JOIN User_Event\
 		ON User.user_id=User_Event.attendee_id\
-		WHERE event_id=:e', { "e": event.event_id })
+		WHERE event_id=:e', \
+		{ "e": event.event_id })
 	return render_template('manageApplicants.html', rows=rows)
 
 @main.route('/operateAttendee')
@@ -84,3 +85,13 @@ def operateAttendee():
 def showHostings():
 	hostings = Event.query.filter_by(host_id=current_user.user_id).all()
 	return render_template('hostings.html', hostings=hostings)
+
+@main.route('/applicantions')
+@login_required
+def showApplications():
+	records = User_Event.query.filter_by(attendee_id=current_user.user_id).all()
+	applications = db.session.execute('SELECT * \
+		FROM Event INNER JOIN User_Event \
+		ON Event.event_id=User_Event.event_id WHERE User_Event.attendee_id=:a', \
+		{"a": current_user.user_id })
+	return render_template('applications.html', applications=applications)
