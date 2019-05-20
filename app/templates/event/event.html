@@ -4,6 +4,8 @@
 
 {% block page_content %}
 
+<img src="{{ url_for('static', filename='posters/') }}{{ e.poster }}", class="img-rounded img-responsive">
+
 <h1>{{ e.title }}</h1>
 <p>{{ e.city }} | {{ e.date }}</p><br>
 <p>HOST: {{ host.username }}</p><br>

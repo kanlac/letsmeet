@@ -1,9 +1,10 @@
-from flask import render_template, flash, url_for, session, redirect, request, jsonify
+from flask import render_template, flash, url_for, session, redirect, request, jsonify, current_app as app
 from ..models import User, Event, User_Event
 from .. import db
 from . import main
 from .forms import ApplicationForm, OriginatingForm
 from flask_login import current_user, login_required
+import os
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -106,6 +107,10 @@ def originate():
 			location=form.location.data, date=form.date.data)
 		if form.quota_limit.data is not None:
 			event.quota_limit = form.quota_limit.data
+		if form.poster is not None:
+			file = form.poster.data
+			event.poster = file.filename
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 		db.session.add(event)
 		db.session.commit()
 		flash('Success!')

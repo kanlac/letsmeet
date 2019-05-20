@@ -39,6 +39,7 @@ class Event(db.Model):
 	city = db.Column(db.Unicode(40))
 	location = db.Column(db.Unicode(256))
 	date = db.Column(db.DATE)
+	poster = db.Column(db.Unicode(256))
 
 	def __repr__(self):
 		return '<Event %r>' % self.event_id

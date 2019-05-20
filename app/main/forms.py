@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, SubmitField, DecimalField, DateField
 from wtforms.validators import DataRequired
 
@@ -14,5 +15,6 @@ class OriginatingForm(FlaskForm):
 	location = StringField('地点', validators=[DataRequired()])
 	date = DateField('日期', validators=[DataRequired()])
 	quota_limit = DecimalField('期望人数')
+	poster = FileField('活动海报', validators=[FileAllowed(['jpg', 'png'], 'Images only!'), FileRequired()])
 	submit = SubmitField('提交')
 
