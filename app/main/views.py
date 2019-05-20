@@ -27,7 +27,7 @@ def showEvent(event_id):
 			statusTxt = '未通过'
 		if record.status is 3:
 			statusTxt = '已通过'
-	return render_template('event.html', host=host, e=e, statusTxt=statusTxt)
+	return render_template('event/event.html', host=host, e=e, statusTxt=statusTxt)
 
 @main.route('/apply/<event_id>', methods=['GET', 'POST'])
 @login_required
@@ -48,7 +48,7 @@ def apply(event_id):
 			db.session.commit()
 			flash('Success!')
 		return redirect(url_for('.showEvent', event_id=event_id))
-	return render_template('apply.html', event=event, form=applicationForm)
+	return render_template('event/apply.html', event=event, form=applicationForm)
 
 @main.route('/manageApplicants/<event_id>', methods=['GET'])
 @login_required
@@ -67,7 +67,7 @@ def showManagingTable(event_id):
 		ON User.user_id=User_Event.attendee_id\
 		WHERE event_id=:e', \
 		{ "e": event.event_id })
-	return render_template('manageApplicants.html', rows=rows)
+	return render_template('event/manageApplicants.html', rows=rows)
 
 @main.route('/operateAttendee')
 @login_required
@@ -84,7 +84,7 @@ def operateAttendee():
 @login_required
 def showHostings():
 	hostings = Event.query.filter_by(host_id=current_user.user_id).all()
-	return render_template('hostings.html', hostings=hostings)
+	return render_template('page/hostings.html', hostings=hostings)
 
 @main.route('/applicantions')
 @login_required
@@ -94,7 +94,7 @@ def showApplications():
 		FROM Event INNER JOIN User_Event \
 		ON Event.event_id=User_Event.event_id WHERE User_Event.attendee_id=:a', \
 		{"a": current_user.user_id })
-	return render_template('applications.html', applications=applications)
+	return render_template('page/applications.html', applications=applications)
 
 @main.route('/originate', methods=['GET', 'POST'])
 @login_required
@@ -110,7 +110,7 @@ def originate():
 		db.session.commit()
 		flash('Success!')
 		return redirect(url_for('.showEvent', event_id=event.event_id))
-	return render_template('originate.html', form=form)
+	return render_template('page/originate.html', form=form)
 
 
 

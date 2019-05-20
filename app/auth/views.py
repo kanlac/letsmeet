@@ -17,7 +17,7 @@ def login():
 			return redirect(url_for('main.index'))
 		else:
 			flash("Password is wrong.")
-	return render_template('login.html', form=form)
+	return render_template('auth/login.html', form=form)
 	
 @auth.route('/logout')
 @login_required
@@ -28,14 +28,11 @@ def logout():
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
-	print('test3')
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		print('test')
 		user = User(username=form.username.data, password=form.password.data)
-		print(user)
 		db.session.add(user)
 		db.session.commit()
 		flash('You can now login.')
 		return redirect(url_for('auth.login'))
-	return render_template('register.html', form=form)
+	return render_template('auth/register.html', form=form)
