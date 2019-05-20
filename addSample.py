@@ -18,19 +18,19 @@ def loadData(db):
 	db.session.commit()
 
 	hiking = Event(title="Let's go to Mount Tai!", host_id=jane.user_id, \
-		description="We wish you'll enjoy it~", city='Jinan', \
+		description="We wish you'll enjoy it~", city='Jinan', quota_limit=30, \
 		location='Road 23', date='2019-05-30')
 	pythonConf = Event(title="Python Conference", host_id=jacob.user_id, \
-		description="A conference for Python lovers.", city='Tianjin', \
+		description="A conference for Python lovers.", city='Tianjin', quota_limit=100,  \
 		location='Road 67', date='2019-08-10')
 	skateboardingDay = Event(title="World Skateboarding Day", host_id=jude.user_id, \
-		description="All skaters in town, come celebrate the day!", city='Beijing', \
+		description="All skaters in town, come celebrate the day!", city='Beijing', quota_limit=200, \
 		location='XX Square', date='2019-06-21')
 	riding = Event(title="Yuantong Mountain Riding", host_id=jerry.user_id, \
-		description="We look for riding lovers!", city='Kunming', \
+		description="We look for riding lovers!", city='Kunming', quota_limit=14, \
 		location='Yuantong Mountain', date='2019-12-07')
 	readingShareSession = Event(title="Reading Share Session", host_id=jacob.user_id, \
-		description="New Book Sharing Session", city='Beijing', \
+		description="New Book Sharing Session", city='Beijing', quota_limit=18, \
 		location='Kubrick Book Store', date='2019-11-12')
 
 

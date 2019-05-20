@@ -2,7 +2,7 @@ from flask import render_template, flash, url_for, session, redirect, request, j
 from ..models import User, Event, User_Event
 from .. import db
 from . import main
-from .forms import ApplicationForm
+from .forms import ApplicationForm, OriginatingForm
 from flask_login import current_user, login_required
 
 @main.route('/', methods=['GET', 'POST'])
@@ -95,3 +95,33 @@ def showApplications():
 		ON Event.event_id=User_Event.event_id WHERE User_Event.attendee_id=:a', \
 		{"a": current_user.user_id })
 	return render_template('applications.html', applications=applications)
+
+@main.route('/originate', methods=['GET', 'POST'])
+@login_required
+def originate():
+	form = OriginatingForm()
+	if form.validate_on_submit():
+		event = Event(host_id=current_user.user_id, title=form.title.data, \
+			description=form.description.data, city=form.city.data, \
+			location=form.location.data, date=form.date.data)
+		if form.quota_limit.data is not None:
+			event.quota_limit = form.quota_limit.data
+		db.session.add(event)
+		db.session.commit()
+		flash('Success!')
+		return redirect(url_for('.showEvent', event_id=event.event_id))
+	return render_template('originate.html', form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
