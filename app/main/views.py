@@ -25,9 +25,9 @@ def showEvent(event_id):
 		if record.status is 1:
 			statusTxt = '已申请'
 		if record.status is 2:
-			statusTxt = '未通过'
-		if record.status is 3:
 			statusTxt = '已通过'
+		if record.status is 3:
+			statusTxt = '未通过'
 	return render_template('event/event.html', host=host, e=e, statusTxt=statusTxt)
 
 @main.route('/apply/<event_id>', methods=['GET', 'POST'])
