@@ -73,7 +73,7 @@ def showManagingTable(event_id):
 @main.route('/operateAttendee')
 @login_required
 def operateAttendee():
-	ue_id = request.args.get('ue_id', type=int)
+	ue_id = request.args.get('id', type=int)
 	newStatus = request.args.get('newStatus', type=int)
 	# update database…
 	record = User_Event.query.filter_by(ue_id=ue_id).one()

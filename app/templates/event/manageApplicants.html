@@ -26,7 +26,6 @@
 	<tbody>
 		{% for row in rows %}
 		<tr>
-			<input type="hidden" name="ue_id" value="{{ row.ue_id }}">
 			<td>{{row.attendee_name}}</td>
 			<td>{{row.form}}</td>
 			<td>
@@ -39,7 +38,8 @@
 				{% endif %}
 			</td>
 			<td>
-				<a href="#" id="accept">通过</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="deny">拒绝</a>
+				<a href="#" class="accept" name="{{row.ue_id}}">通过</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="#" class="deny" name="{{row.ue_id}}">拒绝</a>
 			</td>
 		</tr>
 		{% endfor %}
@@ -57,16 +57,21 @@
 <script type="text/javascript">
 	var 
 		newStatus,
+		id,
 		$aAccept = $('a#accept');
 
 	$(function() {
-		$aAccept.click(function() { // 按下「同意」
+		$('a.accept').click(function() { // 按下「同意」
+			console.log('test')
 			newStatus = "2";
+			id = $(this).attr('name')
 			updateStatus();
 		}),
 
-		$('a#deny').click(function() { // 按下「拒绝」
+
+		$('a.deny').click(function() { // 按下「拒绝」
 			newStatus = "3";
+			id = $(this).attr('name')
 			updateStatus();
 		});
 	});
@@ -74,8 +79,8 @@
 	function updateStatus() {
 		// $.getJSON(url, data, func) 发送一个 GET 请求到 url， data 为查询参数，返回数据后以返回的数据作为参数调用 func
 		$.getJSON("{{ url_for('main.operateAttendee') }}", {
-			ue_id: $('input[name="ue_id"]').val(),
-			newStatus: newStatus
+			newStatus: newStatus,
+			id: id
 		}, function(data) {
 			alert("sucess");
 			location.reload();
