@@ -1,9 +1,8 @@
-from wtforms.validators import DataRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, login_manager
 from flask_login import UserMixin
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model): # UserMixin 为 flask-login 模块标示此表为用于用户认证的表
 	__tablename__ = 'User'
 
 	user_id = db.Column(db.Integer, primary_key=True)
@@ -58,7 +57,7 @@ class User_Event(db.Model):
 		return '<User_Event %r>' % self.ue_id
 
 
-# flask-login 的回调函数
-@login_manager.user_loader # user_loader 是自定义的名字吗？
+# flask-login 的回调函数，app 中 LoginManager 实例的必选设置
+@login_manager.user_loader
 def load_user(user_id):
 	return User.query.get(int(user_id)) # SQLAlchemy 指令的 get() 方法，直接以 id 的 int 值为参数查询
