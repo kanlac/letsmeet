@@ -1,7 +1,7 @@
 from flask import render_template, flash, url_for, session, redirect, request, jsonify
 from ..models import User
 from . import auth
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from .. import db
 
@@ -36,3 +36,35 @@ def register():
 		flash('You can now login.')
 		return redirect(url_for('auth.login'))
 	return render_template('auth/register.html', form=form)
+
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+	form = ChangePasswordForm()
+	if form.validate_on_submit():
+		if not current_user.verify_password(form.old_password.data):
+			flash('Old password was incorrect.')
+		else:
+			user = User.query.filter_by(user_id=current_user.user_id).one()
+			user.password = form.new_password.data
+			db.session.commit()
+			flash('Successfully updated password.')
+			return redirect(url_for('.logout'))
+	return render_template('auth/change-password.html', form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

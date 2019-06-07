@@ -23,3 +23,10 @@ class RegistrationForm(FlaskForm):
 	def validate_username(self, field): # 名称为 validate_FIELD 的方法，将会自动被视为该 field 的 validator
 		if User.query.filter_by(username=field.data).first():
 			raise ValidationError('Username already in use.')
+
+
+class ChangePasswordForm(FlaskForm):
+	old_password = PasswordField('Old password', validators=[DataRequired()])
+	new_password = PasswordField('New password', validators=[DataRequired(), EqualTo('new_password2', message="Passwords aren't identical.")])
+	new_password2 = PasswordField('Confirm password', validators=[DataRequired()])
+	submit = SubmitField('Submit')
