@@ -10,7 +10,7 @@ Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 itsdangerous==1.1.0
 Jinja2==2.10.1
-Mako==1.0.10
+Mako==1.2.2
 MarkupSafe==1.1.1
 mysql-connector-python==8.0.15
 protobuf==3.7.1
